@@ -28,6 +28,9 @@ class PassengerEnterprise < Formula
   depends_on "openssl"
   depends_on :macos => :lion
 
+  conflicts_with "passenger",
+    :because => "passenger and passenger-enterprise install the same binaries."
+
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
