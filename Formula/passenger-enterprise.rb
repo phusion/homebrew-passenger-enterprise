@@ -1,4 +1,4 @@
-class Passenger < Formula
+class PassengerEnterprise < Formula
   desc "Enterprise Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
 
@@ -7,10 +7,10 @@ class Passenger < Formula
     begin
       token = File.read(File.expand_path(filepath))
     rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-      token = ENV['PASSENGER_TOKEN']
+      token = ENV['PASSENGER_ENTERPRISE_TOKEN']
     ensure
       while token.nil? or token.empty?
-        puts "passenger token:"
+        puts "passenger enterprise token:"
         token = $stdin.gets
       end
       File.write(File.expand_path(filepath),token)
@@ -19,7 +19,7 @@ class Passenger < Formula
   end
 
   version "5.0.29"
-  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{Passenger.token}"
+  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   sha256 "7f02929512bac1362e80bff00a5ec53610f80b2505179e04fd7d06b9c142be1d"
 
   option "without-apache2-module", "Disable Apache2 module"
