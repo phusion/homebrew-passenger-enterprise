@@ -1,5 +1,5 @@
 class PassengerEnterprise < Formula
-  desc "Enterprise Server for Ruby, Python, and Node.js apps via Apache/NGINX"
+  desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
 
   def self.token
@@ -7,13 +7,13 @@ class PassengerEnterprise < Formula
     begin
       token = File.read(File.expand_path(filepath))
     rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-      token = ENV['PASSENGER_ENTERPRISE_TOKEN']
+      token = ENV["PASSENGER_ENTERPRISE_TOKEN"]
     ensure
-      while token.nil? or token.empty?
+      while token.nil? || token.empty?
         puts "passenger enterprise token:"
         token = $stdin.gets
       end
-      File.write(File.expand_path(filepath),token)
+      File.write(File.expand_path(filepath), token)
     end
     token.chomp
   end
