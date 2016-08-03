@@ -95,7 +95,7 @@ class PassengerEnterprise < Formula
   def caveats
     s = <<-EOS.undent
       To activate Phusion Passenger for Nginx, run:
-        brew install nginx --with-passenger
+        brew install nginx-passenger-enterprise
 
       EOS
 
