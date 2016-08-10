@@ -1,10 +1,11 @@
-CurlBottleDownloadStrategy.class_eval do
-  def _curl_opts
-    copts = []
-    copts << "--user" << "download:#{PassengerEnterprise.token}"
-    copts
-  end
-end
+# CurlBottleDownloadStrategy.class_eval do
+#   odie "passenger-enterprise bottle code got called."
+#   def _curl_opts
+#     copts = []
+#     copts << "--user" << "download:#{PassengerEnterprise.token}"
+#     copts
+#   end
+# end
 
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
@@ -30,12 +31,12 @@ class PassengerEnterprise < Formula
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   sha256 "d1b709db1b233223f8683eca6714a4cc928ea4793cc038c7b67a97c33d30a0b6"
 
-  bottle do
-    root_url "https://www.phusionpassenger.com"
-    sha256 "edcce493df1f8477316c330a712bcf4c521aaad6b01096752473c1cef1b0023b" => :el_capitan
-    # sha256 "" => :yosemite
-    # sha256 "" => :mavericks
-  end
+  # bottle do
+  #   root_url "https://www.phusionpassenger.com"
+  #   sha256 "edcce493df1f8477316c330a712bcf4c521aaad6b01096752473c1cef1b0023b" => :el_capitan
+  #   # sha256 "" => :yosemite
+  #   # sha256 "" => :mavericks
+  # end
 
   option "without-apache2-module", "Disable Apache2 module"
 
