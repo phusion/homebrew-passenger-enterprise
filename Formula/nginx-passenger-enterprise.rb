@@ -5,12 +5,6 @@ class NginxPassengerEnterprise < Formula
   sha256 "1fd35846566485e03c0e318989561c135c598323ff349c503a6c14826487a801"
   head "http://hg.nginx.org/nginx/", :using => :hg
 
-  # bottle do
-  #   sha256 "2b67c86454cc67bdeb2a637d9872ae471a810d8a2dae40b6a0c1dad7b253d30d" => :el_capitan
-  #   sha256 "6ac0a3e07cad5efb31185998f6cd6754de6d799396ffd872814593ba3430fdb3" => :yosemite
-  #   sha256 "c2f67c6b720a2f2c790338e0d30103acf36c757c068bbed8cc4c79734fd3779e" => :mavericks
-  # end
-
   devel do
     url "https://nginx.org/download/nginx-1.11.3.tar.gz"
     sha256 "4a667f40f9f3917069db1dea1f2d5baa612f1fa19378aadf71502e846a424610"
