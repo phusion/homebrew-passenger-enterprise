@@ -28,12 +28,22 @@ class PassengerEnterprise < Formula
   depends_on "openssl"
   depends_on :macos => :lion
 
+  if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
+    depends_on "apr-util" => :build
+    depends_on "apr" => :build
+  end
+
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
 
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
+
+    if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
+      ENV["APU_CONFIG"] = Formula["apr-util"].opt_bin/"apu-1-config"
+      ENV["APR_CONFIG"] = Formula["apr"].opt_bin/"apr-1-config"
+    end
 
     rake "apache2" if build.with? "apache2-module"
     rake "nginx"
