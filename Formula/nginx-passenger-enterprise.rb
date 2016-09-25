@@ -1,13 +1,25 @@
 class NginxPassengerEnterprise < Formula
   desc "HTTP(S) server and reverse proxy, with Passenger Enterprise enabled"
   homepage "https://nginx.org/"
+
+  stable do
   url "https://nginx.org/download/nginx-1.10.1.tar.gz"
   sha256 "1fd35846566485e03c0e318989561c135c598323ff349c503a6c14826487a801"
-  head "http://hg.nginx.org/nginx/", :using => :hg
+
+    depends_on "openssl"
+  end
 
   devel do
-    url "https://nginx.org/download/nginx-1.11.3.tar.gz"
-    sha256 "4a667f40f9f3917069db1dea1f2d5baa612f1fa19378aadf71502e846a424610"
+    url "https://nginx.org/download/nginx-1.11.4.tar.gz"
+    sha256 "06221c1f43f643bc6bfe5b2c26d19e09f2588d5cde6c65bdb77dfcce7c026b3b"
+
+    depends_on "openssl@1.1"
+  end
+
+  head do
+    url "http://hg.nginx.org/nginx/", :using => :hg
+
+    depends_on "openssl@1.1"
   end
 
   # Before submitting more options to this formula please check they aren't
@@ -22,8 +34,6 @@ class NginxPassengerEnterprise < Formula
 
   depends_on "pcre"
   depends_on "passenger-enterprise"
-  depends_on "openssl" => :recommended
-  depends_on "libressl" => :optional
 
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
@@ -36,16 +46,10 @@ class NginxPassengerEnterprise < Formula
     end
 
     pcre = Formula["pcre"]
-    openssl = Formula["openssl"]
-    libressl = Formula["libressl"]
+    openssl = build.stable? ? Formula["openssl"] : Formula["openssl@1.1"]
 
-    if build.with? "libressl"
-      cc_opt = "-I#{pcre.include} -I#{libressl.include}"
-      ld_opt = "-L#{pcre.lib} -L#{libressl.lib}"
-    else
-      cc_opt = "-I#{pcre.include} -I#{openssl.include}"
-      ld_opt = "-L#{pcre.lib} -L#{openssl.lib}"
-    end
+    cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
+    ld_opt = "-L#{pcre.opt_lib} -L#{openssl.opt_lib}"
 
     args = %W[
       --prefix=#{prefix}
@@ -88,12 +92,12 @@ class NginxPassengerEnterprise < Formula
     else
       man8.install "man/nginx.8"
     end
-
-    (etc/"nginx/servers").mkpath
-    (var/"run/nginx").mkpath
   end
 
   def post_install
+    (etc/"nginx/servers").mkpath
+    (var/"run/nginx").mkpath
+
     # nginx's docroot is #{prefix}/html, this isn't useful, so we symlink it
     # to #{HOMEBREW_PREFIX}/var/www. The reason we symlink instead of patching
     # is so the user can redirect it easily to something else if they choose.
@@ -184,6 +188,6 @@ class NginxPassengerEnterprise < Formula
         }
       }
     EOS
-    system "#{bin}/nginx", "-t", "-c", testpath/"nginx.conf"
+    system bin/"nginx", "-t", "-c", testpath/"nginx.conf"
   end
 end
