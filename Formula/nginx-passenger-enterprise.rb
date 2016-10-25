@@ -1,25 +1,13 @@
 class NginxPassengerEnterprise < Formula
   desc "HTTP(S) server and reverse proxy, with Passenger Enterprise enabled"
   homepage "https://nginx.org/"
-
-  stable do
-  url "https://nginx.org/download/nginx-1.10.1.tar.gz"
-  sha256 "1fd35846566485e03c0e318989561c135c598323ff349c503a6c14826487a801"
-
-    depends_on "openssl"
-  end
+  url "https://nginx.org/download/nginx-1.10.2.tar.gz"
+  sha256 "1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2"
+  head "http://hg.nginx.org/nginx/", :using => :hg
 
   devel do
-    url "https://nginx.org/download/nginx-1.11.4.tar.gz"
-    sha256 "06221c1f43f643bc6bfe5b2c26d19e09f2588d5cde6c65bdb77dfcce7c026b3b"
-
-    depends_on "openssl@1.1"
-  end
-
-  head do
-    url "http://hg.nginx.org/nginx/", :using => :hg
-
-    depends_on "openssl@1.1"
+    url "https://nginx.org/download/nginx-1.11.5.tar.gz"
+    sha256 "223f8a2345a75f891098cf26ccdf208b293350388f51ce69083674c9432db6f6"
   end
 
   # Before submitting more options to this formula please check they aren't
@@ -33,6 +21,7 @@ class NginxPassengerEnterprise < Formula
   deprecated_option "with-spdy" => "with-http2"
 
   depends_on "pcre"
+  depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
 
   conflicts_with "nginx",
@@ -46,7 +35,7 @@ class NginxPassengerEnterprise < Formula
     end
 
     pcre = Formula["pcre"]
-    openssl = build.stable? ? Formula["openssl"] : Formula["openssl@1.1"]
+    openssl = Formula["openssl@1.1"]
 
     cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
     ld_opt = "-L#{pcre.opt_lib} -L#{openssl.opt_lib}"
@@ -55,7 +44,6 @@ class NginxPassengerEnterprise < Formula
       --prefix=#{prefix}
       --with-http_ssl_module
       --with-pcre
-      --with-ipv6
       --sbin-path=#{bin}/nginx
       --with-cc-opt=#{cc_opt}
       --with-ld-opt=#{ld_opt}
@@ -75,6 +63,7 @@ class NginxPassengerEnterprise < Formula
     nginx_ext = `#{Formula["passenger-enterprise"].opt_bin}/passenger-config --nginx-addon-dir`.chomp
     args << "--add-module=#{nginx_ext}"
 
+    args << "--with-ipv6" if build.stable?
     args << "--with-http_dav_module" if build.with? "webdav"
     args << "--with-debug" if build.with? "debug"
     args << "--with-http_gunzip_module" if build.with? "gunzip"
