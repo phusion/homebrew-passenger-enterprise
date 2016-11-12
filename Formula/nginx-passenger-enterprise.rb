@@ -3,6 +3,7 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   url "https://nginx.org/download/nginx-1.10.2.tar.gz"
   sha256 "1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2"
+  revision 1
   head "http://hg.nginx.org/nginx/", :using => :hg
 
   devel do
@@ -21,8 +22,10 @@ class NginxPassengerEnterprise < Formula
   deprecated_option "with-spdy" => "with-http2"
 
   depends_on "pcre"
-  depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
+  # passenger uses apr, which uses openssl, so need to keep
+  # crypto library choice consistent throughout the tree.
+  depends_on "openssl"
 
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
@@ -35,11 +38,10 @@ class NginxPassengerEnterprise < Formula
     end
 
     pcre = Formula["pcre"]
-    openssl = Formula["openssl@1.1"]
+    openssl = Formula["openssl"]
 
     cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
     ld_opt = "-L#{pcre.opt_lib} -L#{openssl.opt_lib}"
-
     args = %W[
       --prefix=#{prefix}
       --with-http_ssl_module
