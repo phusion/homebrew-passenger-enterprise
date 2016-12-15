@@ -18,9 +18,9 @@ class PassengerEnterprise < Formula
     token.chomp
   end
 
-  version "5.0.30"
+  version "5.1.0"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "d1b709db1b233223f8683eca6714a4cc928ea4793cc038c7b67a97c33d30a0b6"
+  sha256 "bcf45d07777b83eae772c35f5582eb50cae4d420fb65b28353769bed66234b8a"
 
   option "without-apache2-module", "Disable Apache2 module"
 

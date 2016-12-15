@@ -3,7 +3,7 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   url "https://nginx.org/download/nginx-1.10.2.tar.gz"
   sha256 "1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2"
-  revision 1
+  revision 2
   head "http://hg.nginx.org/nginx/", :using => :hg
 
   devel do
