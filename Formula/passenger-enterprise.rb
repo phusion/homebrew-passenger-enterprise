@@ -1,6 +1,10 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
+  version "5.1.1"
+  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
+  sha256 "50e20618d7b48b80225c5676121a6408dd10e32e9875a66297bd7ea7727b27fe"
+  head "https://github.com/phusion/passenger.git"
 
   def self.token
     filepath = "~/.passenger-enterprise-download-token"
@@ -18,16 +22,11 @@ class PassengerEnterprise < Formula
     token.chomp
   end
 
-  version "5.1.0"
-  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "bcf45d07777b83eae772c35f5582eb50cae4d420fb65b28353769bed66234b8a"
-
   option "without-apache2-module", "Disable Apache2 module"
 
+  depends_on :macos => :lion
   depends_on "pcre"
   depends_on "openssl"
-  depends_on :macos => :lion
-
   if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
     depends_on "apr-util" => :build
     depends_on "apr" => :build
@@ -43,7 +42,14 @@ class PassengerEnterprise < Formula
     if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
       ENV["APU_CONFIG"] = Formula["apr-util"].opt_bin/"apu-1-config"
       ENV["APR_CONFIG"] = Formula["apr"].opt_bin/"apr-1-config"
+
+    inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
+      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
+      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl"].opt_lib}"
     end
+    inreplace "src/ruby_supportlib/phusion_passenger/config/nginx_engine_compiler.rb",
+      "http://nginx.org",
+      "https://nginx.org"
 
     rake "apache2" if build.with? "apache2-module"
     rake "nginx"

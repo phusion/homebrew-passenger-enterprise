@@ -3,8 +3,9 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   url "https://nginx.org/download/nginx-1.10.2.tar.gz"
   sha256 "1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2"
-  revision 2
+  revision 1
   head "http://hg.nginx.org/nginx/", :using => :hg
+
 
   devel do
     url "https://nginx.org/download/nginx-1.11.7.tar.gz"
@@ -23,6 +24,7 @@ class NginxPassengerEnterprise < Formula
 
   depends_on "pcre"
   depends_on "passenger-enterprise"
+
   # passenger uses apr, which uses openssl, so need to keep
   # crypto library choice consistent throughout the tree.
   depends_on "openssl"
