@@ -42,6 +42,7 @@ class PassengerEnterprise < Formula
     if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
       ENV["APU_CONFIG"] = Formula["apr-util"].opt_bin/"apu-1-config"
       ENV["APR_CONFIG"] = Formula["apr"].opt_bin/"apr-1-config"
+    end
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
       s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
