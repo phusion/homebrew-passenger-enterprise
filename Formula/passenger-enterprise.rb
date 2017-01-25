@@ -20,7 +20,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "c9aed53d5307ee52d8ac941731d4751e0e351317e144ffd1e28bea84015d6bba"
+  sha256 "1bfe932852dd9c80624d7675662652434a587aff2da17899b8fcb1ddc74a78b9"
   head "https://github.com/phusion/passenger.git"
 
   option "without-apache2-module", "Disable Apache2 module"
@@ -28,7 +28,7 @@ class PassengerEnterprise < Formula
   depends_on :macos => :lion
   depends_on "pcre"
   depends_on "openssl"
-  if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
+  if MacOS.version >= :sierra
     depends_on "apr-util" => :build
     depends_on "apr" => :build
   end
@@ -40,7 +40,7 @@ class PassengerEnterprise < Formula
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
 
-    if MacOS.version >= :sierra && (MacOS::Xcode.version.to_f >= 8.0 || MacOS::CLT.version.to_f >= 8.0)
+    if MacOS.version >= :sierra
       ENV["APU_CONFIG"] = Formula["apr-util"].opt_bin/"apu-1-config"
       ENV["APR_CONFIG"] = Formula["apr"].opt_bin/"apr-1-config"
     end
