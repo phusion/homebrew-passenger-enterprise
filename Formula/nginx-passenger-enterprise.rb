@@ -1,15 +1,14 @@
 class NginxPassengerEnterprise < Formula
   desc "HTTP(S) server and reverse proxy, with Passenger Enterprise enabled"
   homepage "https://nginx.org/"
-  url "https://nginx.org/download/nginx-1.10.2.tar.gz"
-  sha256 "1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2"
-  revision 1
+  url "https://nginx.org/download/nginx-1.10.3.tar.gz"
+  sha256 "75020f1364cac459cb733c4e1caed2d00376e40ea05588fb8793076a4c69dd90"
   head "http://hg.nginx.org/nginx/", :using => :hg
 
 
   devel do
-    url "https://nginx.org/download/nginx-1.11.8.tar.gz"
-    sha256 "53aef3715d79015314c2dcb18f2b185a0c64368cc01b30bdf0737a215f666b34"
+    url "https://nginx.org/download/nginx-1.11.12.tar.gz"
+    sha256 "2aff7f9396d1f77256efc363e1cc05ba52d40a29e6de4d9bc08aa444eea14122"
   end
 
   # Before submitting more options to this formula please check they aren't
