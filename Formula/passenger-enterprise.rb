@@ -1,7 +1,7 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  version "5.1.2"
+  version "5.1.4"
 
   def self.token
     filepath = "~/.passenger-enterprise-download-token"
@@ -20,7 +20,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "1bfe932852dd9c80624d7675662652434a587aff2da17899b8fcb1ddc74a78b9"
+  sha256 "a3057896be9b97e199bedb1de5b8c855d910680b1a173a9cb33a04195291111a"
   head "https://github.com/phusion/passenger.git"
 
   option "without-apache2-module", "Disable Apache2 module"
@@ -28,10 +28,6 @@ class PassengerEnterprise < Formula
   depends_on :macos => :lion
   depends_on "pcre"
   depends_on "openssl"
-  if MacOS.version >= :sierra
-    depends_on "apr-util" => :build
-    depends_on "apr" => :build
-  end
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
@@ -40,23 +36,13 @@ class PassengerEnterprise < Formula
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
 
-    if MacOS.version >= :sierra
-      ENV["APU_CONFIG"] = Formula["apr-util"].opt_bin/"apu-1-config"
-      ENV["APR_CONFIG"] = Formula["apr"].opt_bin/"apr-1-config"
-    end
-
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
       s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
       s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl"].opt_lib}"
     end
-    inreplace "src/ruby_supportlib/phusion_passenger/config/nginx_engine_compiler.rb",
-      "http://nginx.org",
-      "https://nginx.org"
 
     rake "apache2" if build.with? "apache2-module"
     rake "nginx"
-
-    system("/usr/bin/ruby ./bin/passenger-config compile-nginx-engine")
 
     (libexec/"download_cache").mkpath
 
@@ -86,6 +72,9 @@ class PassengerEnterprise < Formula
     ruby_libdir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "/usr/bin/ruby", "./dev/install_scripts_bootstrap_code.rb",
       "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
+
+    system("/usr/bin/ruby ./bin/passenger-config compile-nginx-engine")
+    cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", :preserve => true
 
     nginx_addon_dir = `/usr/bin/ruby ./bin/passenger-config about nginx-addon-dir`.strip
     nginx_addon_dir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
