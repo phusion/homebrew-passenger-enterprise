@@ -20,7 +20,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "f577aedf0ceb51cff040ce008584b76d989787e733d4909d471c1e97bcb8a3bd"
+  sha256 "61415d25adad71a87c565f8a6838c19b5b385af3c7dbf5e98236746105202757"
   head "https://github.com/phusion/passenger.git"
 
   option "without-apache2-module", "Disable Apache2 module"
