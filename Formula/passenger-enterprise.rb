@@ -4,17 +4,16 @@ class PassengerEnterprise < Formula
   version "5.1.7"
 
   def self.token
-    filepath = "~/.passenger-enterprise-download-token"
-    begin
-      token = File.read(File.expand_path(filepath))
-    rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-      token = ENV["PASSENGER_ENTERPRISE_TOKEN"]
-    ensure
-      while token.nil? || token.empty?
-        puts "passenger enterprise token:"
-        token = $stdin.gets
-      end
-      File.write(File.expand_path(filepath), token)
+    filepath = File.expand_path("~/.passenger-enterprise-download-token")
+    if File.exist?(filepath)
+      token = File.read(filepath)
+    else
+      token = ENV["HOMEBREW_PASSENGER_ENTERPRISE_TOKEN"]
+    end
+    while token.nil? || token.empty?
+      puts "passenger enterprise token:"
+      token = $stdin.gets
+      ENV["HOMEBREW_PASSENGER_ENTERPRISE_TOKEN"] = token
     end
     token.chomp
   end
@@ -89,6 +88,8 @@ class PassengerEnterprise < Formula
       To activate Phusion Passenger for Nginx, run:
         brew install nginx-passenger-enterprise
 
+      To avoid entering your download-token every time you install or update Passenger Enterprise,
+      create a file at ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
       EOS
 
     s += <<-EOS.undent if build.with? "apache2-module"
