@@ -40,8 +40,8 @@ class PassengerEnterprise < Formula
       s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl"].opt_lib}"
     end
 
-    rake "apache2" if build.with? "apache2-module"
-    rake "nginx"
+    system "rake", "apache2" if build.with? "apache2-module"
+    system "rake", "nginx"
 
     (libexec/"download_cache").mkpath
 
