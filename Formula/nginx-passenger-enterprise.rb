@@ -1,9 +1,9 @@
 class NginxPassengerEnterprise < Formula
   desc "HTTP(S) server and reverse proxy, with Passenger Enterprise enabled"
   homepage "https://nginx.org/"
-  url "https://nginx.org/download/nginx-1.12.1.tar.gz"
-  sha256 "8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb"
-
+  url "https://nginx.org/download/nginx-1.12.2.tar.gz"
+  sha256 "305f379da1d5fb5aefa79e45c829852ca6983c7cd2a79328f8e084a324cf0416"
+  revision 1
   head "https://hg.nginx.org/nginx/", :using => :hg
 
 
@@ -19,15 +19,12 @@ class NginxPassengerEnterprise < Formula
   option "with-debug", "Compile with support for debug log"
   option "with-gunzip", "Compile with support for gunzip module"
 
+  depends_on "openssl" # don't switch to 1.1 until passenger is switched, too
   depends_on "pcre"
-  depends_on "passenger-enterprise"
-
-  # passenger uses apr, which uses openssl, so need to keep
-  # crypto library choice consistent throughout the tree.
-  depends_on "openssl"
 
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
+  depends_on "passenger-enterprise"
 
   def install
     # Changes default port to 8080
@@ -36,8 +33,8 @@ class NginxPassengerEnterprise < Formula
       s.gsub! "    #}\n\n}", "    #}\n    include servers/*;\n}"
     end
 
-    pcre = Formula["pcre"]
     openssl = Formula["openssl"]
+    pcre = Formula["pcre"]
 
     cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
     ld_opt = "-L#{pcre.opt_lib} -L#{openssl.opt_lib}"
@@ -113,23 +110,29 @@ class NginxPassengerEnterprise < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
-    Docroot is: #{var}/www
-
-    The default port has been set in #{etc}/nginx/nginx.conf to 8080 so that
-    nginx can run without sudo.
-
-    nginx will load all files in #{etc}/nginx/servers/.
-
+  def passenger_caveats; <<~EOS
     To activate Phusion Passenger, add this to #{etc}/nginx/nginx.conf, inside the 'http' context:
-      passenger_root #{Formula["passenger-enterprise"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
+      passenger_root #{Formula["passenger"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
       passenger_ruby /usr/bin/ruby;
     EOS
   end
 
+  def caveats
+    s = <<~EOS
+      Docroot is: #{var}/www
+
+      The default port has been set in #{etc}/nginx/nginx.conf to 8080 so that
+      nginx can run without sudo.
+
+      nginx will load all files in #{etc}/nginx/servers/.
+    EOS
+    s << "\n" << passenger_caveats
+    s
+  end
+
   plist_options :manual => "nginx"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
