@@ -112,7 +112,7 @@ class NginxPassengerEnterprise < Formula
 
   def passenger_caveats; <<~EOS
     To activate Phusion Passenger, add this to #{etc}/nginx/nginx.conf, inside the 'http' context:
-      passenger_root #{Formula["passenger"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
+      passenger_root #{Formula["passenger-enterprise"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
       passenger_ruby /usr/bin/ruby;
     EOS
   end
