@@ -50,10 +50,10 @@ class PassengerEnterprise < Formula
     rm_rf "buildout/libuv"
     rm_rf "buildout/cache"
 
-    necessary_files = Dir[".editorconfig", "configure", "Rakefile", "README.md", "CONTRIBUTORS",
-      "CONTRIBUTING.md", "LICENSE", "CHANGELOG", "INSTALL.md",
-      "passenger-enterprise-server.gemspec", "build", "bin", "doc", "man",
-      "dev", "src", "resources", "buildout"]
+    necessary_files = %w[.editorconfig configure Rakefile README.md CONTRIBUTORS
+                         CONTRIBUTING.md LICENSE CHANGELOG INSTALL.md
+                         passenger-enterprise-server.gemspec build bin doc man dev src resources
+                         buildout]
     libexec.mkpath
     cp_r necessary_files, libexec, :preserve => true
 
@@ -84,7 +84,7 @@ class PassengerEnterprise < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       To activate Phusion Passenger for Nginx, run:
         brew install nginx-passenger-enterprise
 
@@ -92,7 +92,7 @@ class PassengerEnterprise < Formula
       create a file at ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
       EOS
 
-    s += <<-EOS.undent if build.with? "apache2-module"
+    s += <<~EOS if build.with? "apache2-module"
       To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
         LoadModule passenger_module #{opt_libexec}/buildout/apache2/mod_passenger.so
         PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini
