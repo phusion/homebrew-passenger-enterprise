@@ -36,6 +36,7 @@ class PassengerEnterprise < Formula
     ENV.delete("SDKROOT")
 
     ENV['EXTRA_CFLAGS']="-I/usr/include/apache2 -I/usr/include/apr-1"
+    ENV['EXTRA_CXXFLAGS']="-I/usr/include/apache2 -I/usr/include/apr-1"
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
       s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
