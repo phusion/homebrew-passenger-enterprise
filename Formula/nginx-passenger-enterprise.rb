@@ -3,13 +3,13 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   url "https://nginx.org/download/nginx-1.12.2.tar.gz"
   sha256 "305f379da1d5fb5aefa79e45c829852ca6983c7cd2a79328f8e084a324cf0416"
-  revision 1
+  revision 2
   head "https://hg.nginx.org/nginx/", :using => :hg
 
 
   devel do
-    url "https://nginx.org/download/nginx-1.13.6.tar.gz"
-    sha256 "8512fc6f986a20af293b61f33b0e72f64a72ea5b1acbcc790c4c4e2d6f63f8f8"
+    url "https://nginx.org/download/nginx-1.13.8.tar.gz"
+    sha256 "8410b6c31ff59a763abf7e5a5316e7629f5a5033c95a3a0ebde727f9ec8464c5"
   end
 
   # Before submitting more options to this formula please check they aren't

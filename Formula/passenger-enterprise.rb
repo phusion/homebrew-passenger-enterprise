@@ -1,7 +1,7 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  version "5.1.12"
+  version "5.2.0"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -19,7 +19,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "6aea777201965c10a484d0bee64cff5578dde4ee6e312bc9447f45dbf7d00b36"
+  sha256 "14ac0ea4cb81908255a2d1403a73d2c6a248ea889fe70864cb1841daa4b5e3a7"
   head "https://github.com/phusion/passenger.git"
 
   option "without-apache2-module", "Disable Apache2 module"
