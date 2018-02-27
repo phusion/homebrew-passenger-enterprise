@@ -1,7 +1,7 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  version "5.2.0"
+  version "5.2.1"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -19,8 +19,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "14ac0ea4cb81908255a2d1403a73d2c6a248ea889fe70864cb1841daa4b5e3a7"
-  head "https://github.com/phusion/passenger.git"
+  sha256 "582df4d86da1977bbc638ae6b6193952a4bd831bf2146fcc84f831da692a3be9"
 
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -34,9 +33,6 @@ class PassengerEnterprise < Formula
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
-
-    ENV['EXTRA_CFLAGS']="-I/usr/include/apache2 -I/usr/include/apr-1"
-    ENV['EXTRA_CXXFLAGS']="-I/usr/include/apache2 -I/usr/include/apr-1"
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
       s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
