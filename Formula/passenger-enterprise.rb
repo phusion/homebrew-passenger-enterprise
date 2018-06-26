@@ -1,7 +1,7 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  version "5.3.2"
+  version "5.3.3"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -19,7 +19,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "970f225957fbf49ab0ac8b0e62df4255a0c476a0aac104e214cc62c008583fd8"
+  sha256 "f8ac3612dced56ecbba3e61d8f4912577bb3439aafc2339222ab7509ff205e64"
 
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -89,7 +89,7 @@ class PassengerEnterprise < Formula
 
       To avoid entering your download-token every time you install or update Passenger Enterprise,
       create a file at ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
-      EOS
+    EOS
 
     s += <<~EOS if build.with? "apache2-module"
       To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
@@ -97,7 +97,7 @@ class PassengerEnterprise < Formula
         PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini
         PassengerDefaultRuby /usr/bin/ruby
 
-      EOS
+    EOS
     s
   end
 
