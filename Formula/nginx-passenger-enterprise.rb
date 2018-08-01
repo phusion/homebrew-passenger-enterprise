@@ -3,8 +3,8 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.15.0.tar.gz"
-  sha256 "b0b58c9a3fd73aa8b89edf5cfadc6641a352e0e6d3071db1eb3215d72b7fb516"
+  url "https://nginx.org/download/nginx-1.15.2.tar.gz"
+  sha256 "eeba09aecfbe8277ac33a5a2486ec2d6731739f3c1c701b42a0c3784af67ad90"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
 
