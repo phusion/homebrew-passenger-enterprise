@@ -11,8 +11,9 @@ class PassengerEnterprise < Formula
       token = ENV["HOMEBREW_PASSENGER_ENTERPRISE_TOKEN"]
     end
     while token.nil? || token.empty?
-      puts "passenger enterprise token:"
+      puts "Passenger Enterprise download token:"
       token = $stdin.gets
+      abort 'Unable to query for the download token' if token.nil?
       ENV["HOMEBREW_PASSENGER_ENTERPRISE_TOKEN"] = token
     end
     token.chomp
