@@ -1,7 +1,7 @@
 class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  version "5.3.4"
+  version "5.3.6"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -20,7 +20,7 @@ class PassengerEnterprise < Formula
   end
 
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  sha256 "30e49dff83e9ed9ba0c52e00dbb0afd2a71b5d2c61ce9fa54f991da66ded3363"
+  sha256 "963a09092872d8da5780faee95d81585ab2fbd44790d5c9a0b94fae2683f3455"
 
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -50,10 +50,9 @@ class PassengerEnterprise < Formula
     rm_rf "buildout/libuv"
     rm_rf "buildout/cache"
 
-    necessary_files = %w[.editorconfig configure Rakefile README.md CONTRIBUTORS
-                         CONTRIBUTING.md LICENSE CHANGELOG INSTALL.md
-                         passenger-enterprise-server.gemspec build bin doc man dev src resources
-                         buildout]
+    necessary_files = Dir["configure", "Rakefile", "README.md", "CONTRIBUTORS", "CONTRIBUTING.md",
+      "LICENSE", "CHANGELOG", "package.json", "passenger-enterprise-server.gemspec",
+      "build", "bin", "doc", "images", "man", "dev", "src", "resources", "buildout"]
     libexec.mkpath
     cp_r necessary_files, libexec, :preserve => true
 
