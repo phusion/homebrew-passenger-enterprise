@@ -1,5 +1,5 @@
 class NginxPassengerEnterprise < Formula
-  desc "HTTP(S) server and reverse proxy, with Passenger Enterprise enabled"
+  desc "Nginx with Passenger Enterprise enabled"
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
@@ -7,12 +7,11 @@ class NginxPassengerEnterprise < Formula
   sha256 "1a3a889a8f14998286de3b14cc1dd5b2747178e012d6d480a18aa413985dae6f"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
-
   depends_on "openssl" # don't switch to 1.1 until passenger is switched, too
+  depends_on "passenger-enterprise"
   depends_on "pcre"
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
-  depends_on "passenger-enterprise"
 
   def install
     # Changes default port to 8080

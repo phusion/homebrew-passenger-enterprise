@@ -1,8 +1,4 @@
 class PassengerEnterprise < Formula
-  desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
-  homepage "https://www.phusionpassenger.com/"
-  version "5.3.6"
-
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
     if File.exist?(filepath)
@@ -13,20 +9,23 @@ class PassengerEnterprise < Formula
     while token.nil? || token.empty?
       puts "Passenger Enterprise download token:"
       token = $stdin.gets
-      abort 'Unable to query for the download token' if token.nil?
+      abort "Unable to query for the download token" if token.nil?
       ENV["HOMEBREW_PASSENGER_ENTERPRISE_TOKEN"] = token
     end
     token.chomp
   end
 
+  desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
+  homepage "https://www.phusionpassenger.com/"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
+  version "5.3.6"
   sha256 "963a09092872d8da5780faee95d81585ab2fbd44790d5c9a0b94fae2683f3455"
 
   option "without-apache2-module", "Disable Apache2 module"
 
   depends_on :macos => :lion
-  depends_on "pcre"
   depends_on "openssl"
+  depends_on "pcre"
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
