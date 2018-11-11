@@ -1,4 +1,6 @@
 class PassengerEnterprise < Formula
+  version "5.3.6"
+
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
     if File.exist?(filepath)
@@ -18,7 +20,6 @@ class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
-  version "5.3.6"
   sha256 "963a09092872d8da5780faee95d81585ab2fbd44790d5c9a0b94fae2683f3455"
 
   option "without-apache2-module", "Disable Apache2 module"
