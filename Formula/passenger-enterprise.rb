@@ -1,5 +1,5 @@
 class PassengerEnterprise < Formula
-  version "5.3.6"
+  version "5.3.7"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
