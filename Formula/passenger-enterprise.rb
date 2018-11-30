@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "5.3.7"
-  sha256 "506affeaabbf2e23424592008af7f5a516bcecd4c0b9d4d9ea56efb8fd1e6db2"
+  version "6.0.0"
+  sha256 "0119fc854e5e0ab3cb071ffc16fc0fc3689244d4b86342df1f82c3b6ed94a92e"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -50,9 +50,10 @@ class PassengerEnterprise < Formula
     rm_rf "buildout/libuv"
     rm_rf "buildout/cache"
 
-    necessary_files = Dir["configure", "Rakefile", "README.md", "CONTRIBUTORS", "CONTRIBUTING.md",
-      "LICENSE", "CHANGELOG", "package.json", "passenger-enterprise-server.gemspec",
-      "build", "bin", "doc", "images", "man", "dev", "src", "resources", "buildout"]
+    necessary_files = %w[configure Rakefile README.md CONTRIBUTORS
+                         CONTRIBUTING.md LICENSE CHANGELOG package.json
+                         passenger-enterprise-server.gemspec build bin doc images man dev src
+                         resources buildout]
     libexec.mkpath
     cp_r necessary_files, libexec, :preserve => true
 
