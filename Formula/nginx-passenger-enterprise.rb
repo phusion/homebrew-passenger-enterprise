@@ -70,7 +70,7 @@ class NginxPassengerEnterprise < Formula
     ]
 
     nginx_ext = `#{Formula["passenger-enterprise"].opt_bin}/passenger-config --nginx-addon-dir`.chomp
-      args << "--add-module=#{nginx_ext}"
+    args << "--add-module=#{nginx_ext}"
 
     if build.head?
       system "./auto/configure", *args
