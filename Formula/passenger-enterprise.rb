@@ -23,13 +23,17 @@ class PassengerEnterprise < Formula
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
 
   option "without-apache2-module", "Disable Apache2 module"
-
-  depends_on :macos => :lion
+  depends_on "nginx" => :recommended
   depends_on "openssl"
   depends_on "pcre"
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
+
+  resource "nginx" do
+    url Formula["nginx"].stable.url
+    sha256 Formula["nginx"].stable.checksum.hexdigest
+  end
 
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
@@ -41,7 +45,23 @@ class PassengerEnterprise < Formula
     end
 
     system "rake", "apache2" if build.with? "apache2-module"
-    system "rake", "nginx"
+
+    if build.with?("nginx")
+      system "rake", "nginx"
+      nginx_addon_dir = `/usr/bin/ruby ./bin/passenger-config about nginx-addon-dir`.strip
+      resource("nginx").stage do
+        _, stderr, = Open3.capture3("nginx", "-V")
+        args = stderr.split("configure arguments:").last.split(" --").reject(&:empty?).map { |s| "--#{s.strip}" }
+        args << "--add-dynamic-module=#{nginx_addon_dir}"
+
+        system "./configure", *args
+
+        system "make"
+
+        (libexec/"buildout/nginx_dynamic/").mkpath
+        cp "objs/ngx_http_passenger_module.so", libexec/"buildout/nginx_dynamic/"
+      end
+    end
 
     (libexec/"download_cache").mkpath
 
@@ -52,9 +72,9 @@ class PassengerEnterprise < Formula
 
     necessary_files = %w[configure Rakefile README.md CONTRIBUTORS
                          CONTRIBUTING.md LICENSE CHANGELOG package.json
-                         passenger-enterprise-server.gemspec build bin doc images man dev src
+                         passenger-enterprise-server.gemspec build bin doc images dev src
                          resources buildout]
-    libexec.mkpath
+
     cp_r necessary_files, libexec, :preserve => true
 
     # Allow Homebrew to create symlinks for the Phusion Passenger commands.
@@ -75,24 +95,33 @@ class PassengerEnterprise < Formula
     system("/usr/bin/ruby ./bin/passenger-config compile-nginx-engine")
     cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", :preserve => true
 
-    nginx_addon_dir = `/usr/bin/ruby ./bin/passenger-config about nginx-addon-dir`.strip
     nginx_addon_dir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "/usr/bin/ruby", "./dev/install_scripts_bootstrap_code.rb",
       "--nginx-module-config", libexec/"bin", "#{nginx_addon_dir}/config"
 
-    mv libexec/"man", share
+    man1.install Dir["man/*.1"]
+    man8.install Dir["man/*.8"]
   end
 
   def caveats
     s = <<~EOS
-      To activate Phusion Passenger for Nginx, run:
-        brew install nginx-passenger-enterprise
+      To avoid entering your download-token every time you install or update Passenger Enterprise, create a file at
+      ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
+    EOS
 
-      To avoid entering your download-token every time you install or update Passenger Enterprise,
-      create a file at ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
+    s += <<~EOS if build.with? "nginx"
+
+      To activate Phusion Passenger for Nginx, run:
+        brew install nginx
+      And add the following to #{etc}/nginx/nginx.conf at the top scope (outside http{}):
+        load_module #{opt_libexec}/buildout/nginx_dynamic/ngx_http_passenger_module.so;
+      And add the following to #{etc}/nginx/nginx.conf in the http scope:
+        passenger_root #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
+        passenger_ruby /usr/bin/ruby;
     EOS
 
     s += <<~EOS if build.with? "apache2-module"
+
       To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
         LoadModule passenger_module #{opt_libexec}/buildout/apache2/mod_passenger.so
         PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini

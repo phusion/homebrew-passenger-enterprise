@@ -1,5 +1,5 @@
 class NginxPassengerEnterprise < Formula
-  desc "Nginx with Passenger Enterprise enabled"
+  desc "Nginx with Passenger Enterprise enabled (deprecated)"
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
@@ -124,6 +124,10 @@ class NginxPassengerEnterprise < Formula
 
   def caveats
     s = <<~EOS
+      ****NOTICE****
+      This formula is deprecated, please use the plain nginx formula and load
+      the dynamic module provided in the passenger-enterprise formula.
+
       Docroot is: #{var}/www
 
       The default port has been set in #{etc}/nginx/nginx.conf to 8080 so that
