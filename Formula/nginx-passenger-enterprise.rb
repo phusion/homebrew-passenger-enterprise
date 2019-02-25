@@ -7,13 +7,19 @@ class NginxPassengerEnterprise < Formula
   sha256 "a8bdafbca87eb99813ae4fcac1ad0875bf725ce19eb265d28268c309b2b40787"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
-  depends_on "openssl" # don't switch to 1.1 until passenger is switched, too
+  revision 1
+
   depends_on "passenger-enterprise"
+  depends_on "openssl"
   depends_on "pcre"
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
 
   def install
+    # keep clean copy of source for compiling dynamic modules e.g. passenger
+    (pkgshare/"src").mkpath
+    system "tar", "-cJf", (pkgshare/"src/src.tar.xz"), "--options", "compression-level=9", "."
+
     # Changes default port to 8080
     inreplace "conf/nginx.conf" do |s|
       s.gsub! "listen       80;", "listen       8080;"
@@ -71,6 +77,7 @@ class NginxPassengerEnterprise < Formula
 
     nginx_ext = `#{Formula["passenger-enterprise"].opt_bin}/passenger-config --nginx-addon-dir`.chomp
     args << "--add-module=#{nginx_ext}"
+    (pkgshare/"src/configure_args.txt").write args.join("\n")
 
     if build.head?
       system "./auto/configure", *args
