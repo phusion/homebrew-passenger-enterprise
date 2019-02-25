@@ -46,15 +46,14 @@ class PassengerEnterprise < Formula
     if build.with?("nginx")
       system "rake", "nginx"
 
-      mkdir "nginx" do
-        system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
-        args = (Formula["nginx"].opt_pkgshare/"src/configure_args.txt").read.split("\n")
-        args << "--add-dynamic-module=#{nginx_addon_dir}"
+    mkdir "nginx" do
+      system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
+      args = (Formula["nginx"].opt_pkgshare/"src/configure_args.txt").read.split("\n")
+      args << "--add-dynamic-module=#{nginx_addon_dir}"
 
-        system "./configure", *args
-
-        system "make"
-        (libexec/"modules").install "objs/ngx_http_passenger_module.so"
+      system "./configure", *args
+      system "make"
+      (libexec/"modules").install "objs/ngx_http_passenger_module.so"
       end
     end
 
@@ -104,25 +103,24 @@ class PassengerEnterprise < Formula
       ~/.passenger-enterprise-download-token containing your download token, homebrew prevents us from creating it for you automatically.
     EOS
 
-    s += <<~EOS if build.with? "nginx"
+  s += <<~EOS if build.with? "nginx"
 
-      To activate Phusion Passenger for Nginx, run:
-        brew install nginx
-      And add the following to #{etc}/nginx/nginx.conf at the top scope (outside http{}):
-        load_module #{opt_libexec}/modules/ngx_http_passenger_module.so;
-      And add the following to #{etc}/nginx/nginx.conf in the http scope:
-        passenger_root #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
-        passenger_ruby /usr/bin/ruby;
-    EOS
+    To activate Phusion Passenger for Nginx, run:
+      brew install nginx
+    And add the following to #{etc}/nginx/nginx.conf at the top scope (outside http{}):
+      load_module #{opt_libexec}/modules/ngx_http_passenger_module.so;
+    And add the following to #{etc}/nginx/nginx.conf in the http scope:
+      passenger_root #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
+      passenger_ruby /usr/bin/ruby;
+  EOS
 
-    s += <<~EOS if build.with? "apache2-module"
+  s += <<~EOS if build.with? "apache2-module"
 
-      To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
-        LoadModule passenger_module #{opt_libexec}/buildout/apache2/mod_passenger.so
-        PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini
-        PassengerDefaultRuby /usr/bin/ruby
-
-    EOS
+    To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
+      LoadModule passenger_module #{opt_libexec}/buildout/apache2/mod_passenger.so
+      PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini
+      PassengerDefaultRuby /usr/bin/ruby
+  EOS
     s
   end
 
