@@ -32,6 +32,12 @@ class PassengerEnterprise < Formula
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
 
+  revision 1
+  patch do
+    url "https://github.com/phusion/passenger/commit/09df7df0.patch?full_index=1"
+    sha256 "397707a788029f4abac4780d2e04ddba37ec9285b44c9d3e4ff0c91c5121d2b7"
+  end
+
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
