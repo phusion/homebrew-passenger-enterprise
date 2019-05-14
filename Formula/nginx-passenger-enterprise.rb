@@ -7,8 +7,8 @@ class NginxPassengerEnterprise < Formula
   sha256 "3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
-  depends_on "passenger-enterprise"
   depends_on "openssl"
+  depends_on "passenger-enterprise"
   depends_on "pcre"
   conflicts_with "nginx",
     :because => "nginx and nginx-passenger-enterprise install the same binaries."
