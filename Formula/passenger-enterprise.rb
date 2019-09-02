@@ -26,13 +26,13 @@ class PassengerEnterprise < Formula
 
   # to build nginx module
   depends_on "nginx" => :recommended
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre"
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
 
-  revision 3
+  revision 4
   patch do
     url "https://github.com/phusion/passenger/commit/09df7df0.patch?full_index=1"
     sha256 "397707a788029f4abac4780d2e04ddba37ec9285b44c9d3e4ff0c91c5121d2b7"
@@ -43,8 +43,8 @@ class PassengerEnterprise < Formula
     ENV.delete("SDKROOT")
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
-      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl"].opt_include}"
-      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl"].opt_lib}"
+      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl@1.1"].opt_include}"
+      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl@1.1"].opt_lib}"
     end
 
     system "rake", "apache2" if build.with? "apache2-module"

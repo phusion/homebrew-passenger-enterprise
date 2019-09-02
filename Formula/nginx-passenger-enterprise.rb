@@ -3,11 +3,11 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.17.1.tar.gz"
-  sha256 "6f1825b4514e601579986035783769c456b888d3facbab78881ed9b58467e73e"
+  url "https://nginx.org/download/nginx-1.17.3.tar.gz"
+  sha256 "3b84fe1c2cf9ca22fde370e486a9ab16b6427df1b6ea62cdb61978c9f34d0f3c"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
   depends_on "pcre"
   conflicts_with "nginx",
@@ -24,7 +24,7 @@ class NginxPassengerEnterprise < Formula
       s.gsub! "    #}\n\n}", "    #}\n    include servers/*;\n}"
     end
 
-    openssl = Formula["openssl"]
+    openssl = Formula["openssl@1.1"]
     pcre = Formula["pcre"]
 
     cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
