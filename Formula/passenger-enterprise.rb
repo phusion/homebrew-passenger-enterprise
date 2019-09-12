@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.2"
-  sha256 "b37c6b8d0e2c270221cfcb711165f460fb4432abaeb3a46f0f38ef8ed56bc351"
+  version "6.0.3"
+  sha256 "b7e9394dcc3f4db21d07212e43197a7966cd5f889b7e644473568bec2062afce"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -31,12 +31,6 @@ class PassengerEnterprise < Formula
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
-
-  revision 4
-  patch do
-    url "https://github.com/phusion/passenger/commit/09df7df0.patch?full_index=1"
-    sha256 "397707a788029f4abac4780d2e04ddba37ec9285b44c9d3e4ff0c91c5121d2b7"
-  end
 
   def install
     # https://github.com/Homebrew/homebrew-core/pull/1046
