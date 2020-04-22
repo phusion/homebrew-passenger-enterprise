@@ -3,8 +3,8 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.17.6.tar.gz"
-  sha256 "3cb4a5314dc0ab0a4e8a7b51ae17c027133417a45cc6c5a96e3dd80141c237b6"
+  url "https://nginx.org/download/nginx-1.17.10.tar.gz"
+  sha256 "a9aa73f19c352a6b166d78e2a664bb3ef1295bbe6d3cc5aa7404bd4664ab4b83"
   head "https://hg.nginx.org/nginx/", :using => :hg
 
   depends_on "openssl@1.1"
@@ -116,9 +116,7 @@ class NginxPassengerEnterprise < Formula
     # and Homebrew used to suggest the user copy the plist for nginx to their
     # ~/Library/LaunchAgents directory. So we need to have a symlink there
     # for such cases
-    if rack.subdirs.any? { |d| d.join("sbin").directory? }
-      sbin.install_symlink bin/"nginx"
-    end
+    sbin.install_symlink bin/"nginx" if rack.subdirs.any? { |d| d.join("sbin").directory? }
   end
 
   def passenger_caveats; <<~EOS
@@ -147,28 +145,29 @@ class NginxPassengerEnterprise < Formula
 
   plist_options :manual => "nginx"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>KeepAlive</key>
-        <false/>
-        <key>ProgramArguments</key>
-        <array>
-            <string>#{opt_bin}/nginx</string>
-            <string>-g</string>
-            <string>daemon off;</string>
-        </array>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-      </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>KeepAlive</key>
+          <false/>
+          <key>ProgramArguments</key>
+          <array>
+              <string>#{opt_bin}/nginx</string>
+              <string>-g</string>
+              <string>daemon off;</string>
+          </array>
+          <key>WorkingDirectory</key>
+          <string>#{HOMEBREW_PREFIX}</string>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do
