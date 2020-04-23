@@ -119,11 +119,12 @@ class NginxPassengerEnterprise < Formula
     sbin.install_symlink bin/"nginx" if rack.subdirs.any? { |d| d.join("sbin").directory? }
   end
 
-  def passenger_caveats; <<~EOS
-    To activate Phusion Passenger, add this to #{etc}/nginx/nginx.conf, inside the 'http' context:
-      passenger_root #{Formula["passenger-enterprise"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
-      passenger_ruby /usr/bin/ruby;
-  EOS
+  def passenger_caveats
+    <<~EOS
+      To activate Phusion Passenger, add this to #{etc}/nginx/nginx.conf, inside the 'http' context:
+        passenger_root #{Formula["passenger-enterprise"].opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini;
+        passenger_ruby /usr/bin/ruby;
+    EOS
   end
 
   def caveats
