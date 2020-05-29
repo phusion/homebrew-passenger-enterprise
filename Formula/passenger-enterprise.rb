@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.4"
-  sha256 "9d8041713e87247b4af3dfbd051d40eda9ef11780fb87f447ad4f7fcd675c597"
+  version "6.0.5"
+  sha256 "015cddc57a205123812ae0dff3c7d253d06032e55a27493c80aa86218d606ec2"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -31,11 +31,6 @@ class PassengerEnterprise < Formula
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries."
-  # Enables setting temp path to avoid sandbox violations, already merged upstream
-  patch do
-    url "https://github.com/phusion/passenger/commit/e512231f.patch?full_index=1"
-    sha256 "9f39f5c1c8b68516f7bac0ba07921144a5de30b6a72ef2423ea83a77d512bea8"
-  end
 
   def install
     if MacOS.version >= :mojave && MacOS::CLT.installed?
