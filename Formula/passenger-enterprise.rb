@@ -1,7 +1,6 @@
 class PassengerEnterprise < Formula
   version "6.0.6"
   sha256 "c291f721a9045b8e1319eb409e8224cd64b2dcaff032ae0e6f69eafa266715a3"
-  patch :DATA
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -164,64 +163,3 @@ class PassengerEnterprise < Formula
     system "#{Formula["nginx"].opt_bin}/nginx", "-t", "-c", testpath/"nginx.conf"
   end
 end
-
-__END__
-diff --git a/src/agent/Core/ApplicationPool/Pool/RollingRestart.cpp b/src/agent/Core/ApplicationPool/Pool/RollingRestart.cpp
-index 6b0089394..003567e23 100644
---- a/src/agent/Core/ApplicationPool/Pool/RollingRestart.cpp
-+++ b/src/agent/Core/ApplicationPool/Pool/RollingRestart.cpp
-@@ -97,8 +97,8 @@ Pool::findProcessNeedingRollingRestart(const GroupPtr &group,
- }
- 
- void
--Pool::setRestarterThreadInactive(this_thread::disable_interruption *di,
--	this_thread::disable_syscall_interruption *dsi)
-+Pool::setRestarterThreadInactive(boost::this_thread::disable_interruption *di,
-+	boost::this_thread::disable_syscall_interruption *dsi)
- {
- 	ScopedLock l(syncher);
- 	restarterThreadActive = false;
-@@ -106,8 +106,8 @@ Pool::setRestarterThreadInactive(this_thread::disable_interruption *di,
- 	restarterThreadGupid.clear();
- 	P_DEBUG("Rolling restarter thread done");
- 	if (debugSupport != NULL && debugSupport->rollingRestarting) {
--		this_thread::restore_interruption ri(*di);
--		this_thread::restore_syscall_interruption rsi(*dsi);
-+		boost::this_thread::restore_interruption ri(*di);
-+		boost::this_thread::restore_syscall_interruption rsi(*dsi);
- 		debugSupport->debugger->send("Done rolling restarting");
- 	}
- }
-@@ -138,8 +138,8 @@ Pool::waitUntilOldProcessIsGone(const ProcessPtr &process, const string &name,
- void
- Pool::restarterThreadRealMain() {
- 	TRACE_POINT();
--	this_thread::disable_interruption di;
--	this_thread::disable_syscall_interruption dsi;
-+	boost::this_thread::disable_interruption di;
-+	boost::this_thread::disable_syscall_interruption dsi;
- 	ScopeGuard guard(boost::bind(&Pool::setRestarterThreadInactive, this, &di, &dsi));
- 	ScopedLock l(syncher);
- 	set<string> ignoreList;
-@@ -170,8 +170,8 @@ Pool::restarterThreadRealMain() {
- 		UPDATE_TRACE_POINT();
- 		try {
- 			UPDATE_TRACE_POINT();
--			this_thread::restore_interruption ri(di);
--			this_thread::restore_syscall_interruption rsi(dsi);
-+			boost::this_thread::restore_interruption ri(di);
-+			boost::this_thread::restore_syscall_interruption rsi(dsi);
- 			newProcess = group->createProcessObject(*spawner, spawner->spawn(options));
- 		} catch (const thread_interrupted &) {
- 			// Returning so that we don't verify invariants.
-@@ -216,8 +216,8 @@ Pool::restarterThreadRealMain() {
- 			newProcess));
- 
- 		if (debugSupport != NULL && debugSupport->rollingRestarting) {
--			this_thread::restore_interruption ri(di);
--			this_thread::restore_syscall_interruption rsi(dsi);
-+			boost::this_thread::restore_interruption ri(di);
-+			boost::this_thread::restore_syscall_interruption rsi(dsi);
- 			debugSupport->debugger->send("About to attach rolling restarted process");
- 			debugSupport->messages->recv("Proceed with attaching rolling restarted process");
- 		}
