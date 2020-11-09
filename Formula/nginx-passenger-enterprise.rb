@@ -13,12 +13,11 @@ class NginxPassengerEnterprise < Formula
     regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version has been released}i)
   end
 
-
   depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
   depends_on "pcre"
   conflicts_with "nginx",
-    :because => "nginx and nginx-passenger-enterprise install the same binaries"
+    because: "nginx and nginx-passenger-enterprise install the same binaries"
 
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger
