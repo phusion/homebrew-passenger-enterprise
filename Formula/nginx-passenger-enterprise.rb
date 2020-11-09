@@ -3,9 +3,16 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.19.1.tar.gz"
-  sha256 "a004776c64ed3c5c7bc9b6116ba99efab3265e6b81d49a57ca4471ff90655492"
-  head "https://hg.nginx.org/nginx/", :using => :hg
+  url "https://nginx.org/download/nginx-1.19.4.tar.gz"
+  sha256 "61df546927905a0d624f9396bb7a8bc7ca7fd26522ce9714d56a78b73284000e"
+  license "BSD-2-Clause"
+  head "https://hg.nginx.org/nginx/", using: :hg
+
+  livecheck do
+    url :homepage
+    regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version has been released}i)
+  end
+
 
   depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
@@ -144,7 +151,7 @@ class NginxPassengerEnterprise < Formula
     s
   end
 
-  plist_options :manual => "nginx"
+  plist_options manual: "nginx"
 
   def plist
     <<~EOS
