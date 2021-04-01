@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.7"
-  sha256 "879743e9c332c4f0a9e6de8a0f19b74f9c5171147e41be4e2297946af6ed8ac9"
+  version "6.0.8"
+  sha256 "2dd00fb47a0bca82e9fa887406318dbd85a425a5ba02d4cab16c808cb4129f16"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -30,7 +30,7 @@ class PassengerEnterprise < Formula
   depends_on "pcre"
 
   conflicts_with "passenger",
-                 :because => "passenger and passenger-enterprise install the same binaries"
+    :because => "passenger and passenger-enterprise install the same binaries"
 
   def install
     if MacOS.version >= :mojave && MacOS::CLT.installed?
@@ -47,17 +47,17 @@ class PassengerEnterprise < Formula
     system "rake", "apache2" if build.with? "apache2-module"
     nginx_addon_dir = `./bin/passenger-config about nginx-addon-dir`.strip
     if build.with?("nginx")
-      system "rake", "nginx"
+    system "rake", "nginx"
 
-      mkdir "nginx" do
-        system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
-        args = (Formula["nginx"].opt_pkgshare/"src/configure_args.txt").read.split("\n")
-        args << "--add-dynamic-module=#{nginx_addon_dir}"
+    mkdir "nginx" do
+      system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
+      args = (Formula["nginx"].opt_pkgshare/"src/configure_args.txt").read.split("\n")
+      args << "--add-dynamic-module=#{nginx_addon_dir}"
 
-        system "./configure", *args
-        system "make"
-        (libexec/"modules").install "objs/ngx_http_passenger_module.so"
-      end
+      system "./configure", *args
+      system "make"
+      (libexec/"modules").install "objs/ngx_http_passenger_module.so"
+    end
     end
 
     (libexec/"download_cache").mkpath
@@ -87,14 +87,14 @@ class PassengerEnterprise < Formula
     ruby_libdir = `./bin/passenger-config about ruby-libdir`.strip
     ruby_libdir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "./dev/install_scripts_bootstrap_code.rb",
-           "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
+      "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
 
     system "./bin/passenger-config", "compile-nginx-engine"
     cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", :preserve => true
 
     nginx_addon_dir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "./dev/install_scripts_bootstrap_code.rb",
-           "--nginx-module-config", libexec/"bin", "#{nginx_addon_dir}/config"
+      "--nginx-module-config", libexec/"bin", "#{nginx_addon_dir}/config"
 
     man1.install Dir["man/*.1"]
     man8.install Dir["man/*.8"]
@@ -117,14 +117,14 @@ class PassengerEnterprise < Formula
         passenger_ruby /usr/bin/ruby;
   EOS
 
-                              s += <<~EOS if build.with? "apache2-module"
+    s += <<~EOS if build.with? "apache2-module"
 
       To activate Phusion Passenger for Apache, create /etc/apache2/other/passenger.conf:
         LoadModule passenger_module #{opt_libexec}/buildout/apache2/mod_passenger.so
         PassengerRoot #{opt_libexec}/src/ruby_supportlib/phusion_passenger/locations.ini
         PassengerDefaultRuby /usr/bin/ruby
     EOS
-                                                        s
+    s
   end
 
   test do
