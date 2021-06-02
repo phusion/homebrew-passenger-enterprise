@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.8"
-  sha256 "2dd00fb47a0bca82e9fa887406318dbd85a425a5ba02d4cab16c808cb4129f16"
+  version "6.0.9"
+  sha256 "c111081b303e88a8063399b1ffec81a0671ed6df2dc131194bc86ffcbab7d884"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -21,6 +21,7 @@ class PassengerEnterprise < Formula
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
+  license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
 
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -72,7 +73,7 @@ class PassengerEnterprise < Formula
                          passenger-enterprise-server.gemspec build bin doc images dev src
                          resources buildout]
 
-    cp_r necessary_files, libexec, :preserve => true
+    cp_r necessary_files, libexec, preserve: true
 
     # Allow Homebrew to create symlinks for the Phusion Passenger commands.
     bin.install_symlink Dir["#{libexec}/bin/*"]
@@ -90,7 +91,7 @@ class PassengerEnterprise < Formula
       "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
 
     system "./bin/passenger-config", "compile-nginx-engine"
-    cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", :preserve => true
+    cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", preserve: true
 
     nginx_addon_dir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "./dev/install_scripts_bootstrap_code.rb",
