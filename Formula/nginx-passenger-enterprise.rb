@@ -3,8 +3,8 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.21.0.tar.gz"
-  sha256 "fe192a4bac2bd3a769e8695cb9fe14a00e57eaceb919095347a83b5b2afc0771"
+  url "https://nginx.org/download/nginx-1.21.1.tar.gz"
+  sha256 "68ba0311342115163a0354cad34f90c05a7e8bf689dc498abf07899eda155560"
   license "BSD-2-Clause"
   head "https://hg.nginx.org/nginx/", using: :hg
 
@@ -18,11 +18,12 @@ class NginxPassengerEnterprise < Formula
   depends_on "pcre"
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
+  uses_from_macos "xz" => :build
 
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger
     (pkgshare/"src").mkpath
-    system "tar", "-cJf", (pkgshare/"src/src.tar.xz"), "--options", "compression-level=9", "."
+    system "tar", "-cJf", (pkgshare/"src/src.tar.xz"), "."
 
     # Changes default port to 8080
     inreplace "conf/nginx.conf" do |s|
