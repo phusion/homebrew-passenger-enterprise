@@ -22,6 +22,7 @@ class PassengerEnterprise < Formula
   homepage "https://www.phusionpassenger.com/"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
+  revision 2
 
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -99,6 +100,9 @@ class PassengerEnterprise < Formula
 
     man1.install Dir["man/*.1"]
     man8.install Dir["man/*.8"]
+
+    # See https://github.com/Homebrew/homebrew-core/pull/84379#issuecomment-910179525
+    deuniversalize_machos
   end
 
   def caveats
