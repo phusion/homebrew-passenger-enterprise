@@ -3,8 +3,8 @@ class NginxPassengerEnterprise < Formula
   homepage "https://nginx.org/"
   # Use "mainline" releases only (odd minor version number), not "stable"
   # See https://www.nginx.com/blog/nginx-1-12-1-13-released/ for why
-  url "https://nginx.org/download/nginx-1.21.1.tar.gz"
-  sha256 "68ba0311342115163a0354cad34f90c05a7e8bf689dc498abf07899eda155560"
+  url "https://nginx.org/download/nginx-1.21.3.tar.gz"
+  sha256 "14774aae0d151da350417efc4afda5cce5035056e71894836797e1f6e2d1175a"
   license "BSD-2-Clause"
   head "https://hg.nginx.org/nginx/", using: :hg
 
@@ -16,6 +16,7 @@ class NginxPassengerEnterprise < Formula
   depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
   depends_on "pcre"
+
   uses_from_macos "xz" => :build
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
