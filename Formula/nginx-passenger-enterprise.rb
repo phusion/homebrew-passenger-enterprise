@@ -16,9 +16,9 @@ class NginxPassengerEnterprise < Formula
   depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
   depends_on "pcre"
+  uses_from_macos "xz" => :build
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
-  uses_from_macos "xz" => :build
 
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger
