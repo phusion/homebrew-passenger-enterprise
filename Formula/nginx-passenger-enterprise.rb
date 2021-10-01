@@ -7,6 +7,7 @@ class NginxPassengerEnterprise < Formula
   sha256 "14774aae0d151da350417efc4afda5cce5035056e71894836797e1f6e2d1175a"
   license "BSD-2-Clause"
   head "https://hg.nginx.org/nginx/", using: :hg
+  revision 1
 
   livecheck do
     url :homepage
