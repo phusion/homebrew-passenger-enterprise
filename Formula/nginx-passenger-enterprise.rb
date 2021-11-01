@@ -6,8 +6,8 @@ class NginxPassengerEnterprise < Formula
   url "https://nginx.org/download/nginx-1.21.3.tar.gz"
   sha256 "14774aae0d151da350417efc4afda5cce5035056e71894836797e1f6e2d1175a"
   license "BSD-2-Clause"
-  head "https://hg.nginx.org/nginx/", using: :hg
   revision 1
+  head "https://hg.nginx.org/nginx/", using: :hg
 
   livecheck do
     url :homepage
