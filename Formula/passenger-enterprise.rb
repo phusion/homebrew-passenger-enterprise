@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.11"
-  sha256 "917c46dba0438cc0aaab81e497119edbd7e94a1910ce98cf30d896860d319117"
+  version "6.0.12"
+  sha256 "bf884fc01110cb6eec97c0bfeabd491e8228fa1d707e1ea2b07bdbf82615427c"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -22,7 +22,6 @@ class PassengerEnterprise < Formula
   homepage "https://www.phusionpassenger.com/"
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
-  revision 2
 
   option "without-apache2-module", "Disable Apache2 module"
 
