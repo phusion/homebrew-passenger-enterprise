@@ -6,7 +6,7 @@ class NginxPassengerEnterprise < Formula
   url "https://nginx.org/download/nginx-1.21.6.tar.gz"
   sha256 "66dc7081488811e9f925719e34d1b4504c2801c81dee2920e5452a86b11405ae"
   license "BSD-2-Clause"
-  revision 1
+  revision 2
   head "https://hg.nginx.org/nginx/", using: :hg
 
   livecheck do
