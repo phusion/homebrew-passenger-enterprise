@@ -16,9 +16,11 @@ class NginxPassengerEnterprise < Formula
 
   depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
-  depends_on "pcre"
+  depends_on "pcre2"
 
   uses_from_macos "xz" => :build
+  uses_from_macos "libxcrypt"
+
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
 

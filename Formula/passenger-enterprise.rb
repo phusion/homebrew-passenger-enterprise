@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.15"
-  sha256 "cfbe4ceba1da60c41aa2a5490cfb78f49ec66975c7f2cfb6a3bb7834f99e18a3"
+  version "6.0.16"
+  sha256 "4a2fd8cc3534c95848fc9c577312b43e47e0f7d544d814d479d0177b1ac9df6e"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -30,6 +30,11 @@ class PassengerEnterprise < Formula
   depends_on "nginx" => :recommended
   depends_on "openssl@1.1"
   depends_on "pcre"
+
+  uses_from_macos "xz" => :build
+  uses_from_macos "curl"
+  uses_from_macos "libxcrypt"
+  uses_from_macos "ruby"
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries"
