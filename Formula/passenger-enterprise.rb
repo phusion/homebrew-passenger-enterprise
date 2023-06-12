@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.17"
-  sha256 "6e1e515a082dfb0ccc5895b66cd7dce4f9b8160e9d0e633d2967a55b2212dc4f"
+  version "6.0.18"
+  sha256 "c341e749dfc98028f2341130d98539cbd9a67c4133ab388c8c8379dc03e1f4bb"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -30,6 +30,7 @@ class PassengerEnterprise < Formula
   depends_on "nginx" => :recommended
   depends_on "openssl@1.1"
   depends_on "pcre"
+  depends_on "pcre2"
 
   uses_from_macos "xz" => :build
   uses_from_macos "curl"
@@ -95,6 +96,12 @@ class PassengerEnterprise < Formula
     ruby_libdir.gsub!(/^#{Regexp.escape Dir.pwd}/, libexec)
     system "./dev/install_scripts_bootstrap_code.rb",
       "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
+
+    # Recreate the tarball with a top-level directory, and use Gzip compression.
+    mkdir "nginx-#{Formula["nginx"].version}" do
+      system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
+    end
+    system "tar", "-czf", buildpath/"nginx.tar.gz", "nginx-#{Formula["nginx"].version}"
 
     system "./bin/passenger-config", "compile-nginx-engine"
     cp Dir["buildout/support-binaries/nginx*"], libexec/"buildout/support-binaries", preserve: true
