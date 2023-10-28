@@ -28,7 +28,7 @@ class PassengerEnterprise < Formula
 
   # to build nginx module
   depends_on "nginx" => :recommended
-  depends_on "openssl@1.1"
+  depends_on "openssl@3"
   depends_on "pcre"
   depends_on "pcre2"
 
@@ -48,8 +48,8 @@ class PassengerEnterprise < Formula
     end
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
-      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl@1.1"].opt_include}"
-      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl@1.1"].opt_lib}"
+      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{Formula["openssl@3"].opt_include}"
+      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{Formula["openssl@3"].opt_lib}"
     end
 
     system "rake", "apache2" if build.with? "apache2-module"
