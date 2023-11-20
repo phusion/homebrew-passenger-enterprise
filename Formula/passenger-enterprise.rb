@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.18"
-  sha256 "c341e749dfc98028f2341130d98539cbd9a67c4133ab388c8c8379dc03e1f4bb"
+  version "6.0.19"
+  sha256 "705f1d4b539634185d731257077b12e3894ce366c68448d7417b55d5e8b79778"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")

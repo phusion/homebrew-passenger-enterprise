@@ -14,8 +14,8 @@ class NginxPassengerEnterprise < Formula
     regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version}i)
   end
 
-  depends_on "openssl@1.1"
   depends_on "passenger-enterprise"
+  depends_on "openssl@3"
   depends_on "pcre2"
 
   uses_from_macos "xz" => :build
@@ -35,7 +35,7 @@ class NginxPassengerEnterprise < Formula
       s.gsub! "    #}\n\n}", "    #}\n    include servers/*;\n}"
     end
 
-    openssl = Formula["openssl@1.1"]
+    openssl = Formula["openssl@3"]
     pcre = Formula["pcre2"]
 
     cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
@@ -157,11 +157,7 @@ class NginxPassengerEnterprise < Formula
   end
 
   service do
-    if OS.linux?
-      run [opt_bin/"nginx", "-g", "'daemon off;'"]
-    else
-      run [opt_bin/"nginx", "-g", "daemon off;"]
-    end
+    run [opt_bin/"nginx", "-g", "daemon off;"]
     keep_alive false
     working_dir HOMEBREW_PREFIX
   end
