@@ -41,7 +41,7 @@ class PassengerEnterprise < Formula
     :because => "passenger and passenger-enterprise install the same binaries"
 
   def install
-    if MacOS.version >= :mojave && MacOS::CLT.installed?
+    if OS.mac? && MacOS.version >= :mojave && MacOS::CLT.installed?
       ENV["SDKROOT"] = MacOS::CLT.sdk_path(MacOS.version)
     else
       ENV.delete("SDKROOT")
@@ -53,9 +53,9 @@ class PassengerEnterprise < Formula
     end
 
     system "rake", "apache2" if build.with? "apache2-module"
-    nginx_addon_dir = `./bin/passenger-config about nginx-addon-dir`.strip
     if build.with?("nginx")
     system "rake", "nginx"
+    nginx_addon_dir = `./bin/passenger-config about nginx-addon-dir`.strip
 
     mkdir "nginx" do
       system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
