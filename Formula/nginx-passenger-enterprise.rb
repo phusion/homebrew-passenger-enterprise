@@ -14,8 +14,8 @@ class NginxPassengerEnterprise < Formula
     regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version}i)
   end
 
-  depends_on "passenger-enterprise"
   depends_on "openssl@3"
+  depends_on "passenger-enterprise"
   depends_on "pcre2"
 
   uses_from_macos "xz" => :build
