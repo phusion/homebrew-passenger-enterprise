@@ -23,7 +23,7 @@ class PassengerEnterprise < Formula
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
 
-  revision Formula["passenger"].revision
+  revision Formula["passenger"].revision if Formula["passenger"].version >= version
   option "without-apache2-module", "Disable Apache2 module"
 
   # to build nginx module
