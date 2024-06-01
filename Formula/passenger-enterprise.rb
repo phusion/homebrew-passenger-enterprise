@@ -23,6 +23,11 @@ class PassengerEnterprise < Formula
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
 
+  patch do
+    url "https://github.com/phusion/passenger/commit/4038e18f8f9231f6edc58f444aae1f282db4aa9b.patch?full_index=1"
+    sha256 "8a8cb3232506090279bfe23d37fdd6f5ad265f94bd64f60a9d6f3428afe73724"
+  end
+
   revision Formula["passenger"].revision if Formula["passenger"].version >= version
   option "without-apache2-module", "Disable Apache2 module"
 
