@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.22"
-  sha256 "f7818c8f4eda89d22c5dea786c82412c12cec54c7138615f9070992f364f2eee"
+  version "6.0.23"
+  sha256 "554ca6e4b7c9d9a203ec8d2d4f68a8732ef787150b7f5e732ff9a0e051d2a689"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -23,11 +23,6 @@ class PassengerEnterprise < Formula
   url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
 
-  patch do
-    url "https://github.com/phusion/passenger/commit/4038e18f8f9231f6edc58f444aae1f282db4aa9b.patch?full_index=1"
-    sha256 "8a8cb3232506090279bfe23d37fdd6f5ad265f94bd64f60a9d6f3428afe73724"
-  end
-
   revision Formula["passenger"].revision if Formula["passenger"].version >= version
   option "without-apache2-module", "Disable Apache2 module"
 
@@ -41,6 +36,7 @@ class PassengerEnterprise < Formula
   uses_from_macos "curl"
   uses_from_macos "libxcrypt"
   uses_from_macos "ruby"
+  uses_from_macos "zlib"
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries"
