@@ -115,7 +115,7 @@ class NginxPassengerEnterprise < Formula
     dst = var/"www"
 
     if dst.exist?
-      html.rmtree
+      rm_r(html)
       dst.mkpath
     else
       dst.dirname.mkpath
