@@ -7,7 +7,7 @@ class NginxPassengerEnterprise < Formula
   sha256 Formula["nginx"].stable.checksum.hexdigest
   license "BSD-2-Clause"
   revision Formula["nginx"].revision
-  head "https://hg.nginx.org/nginx/", using: :hg
+  head "https://github.com/nginx/nginx.git", branch: "master"
 
   livecheck do
     url :homepage
@@ -20,6 +20,7 @@ class NginxPassengerEnterprise < Formula
 
   uses_from_macos "xz" => :build
   uses_from_macos "libxcrypt"
+  uses_from_macos "zlib"
 
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
