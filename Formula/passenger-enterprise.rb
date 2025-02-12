@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.0.24"
-  sha256 "cd3bce20611223b1beb6af2d9c787c703a36abca33d83f57ab54075648219aae"
+  version "6.0.25"
+  sha256 "aac611f20c49329adbbec00fc7efa4e0646119db7455582d7a5ed48d06591a82"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -29,7 +29,6 @@ class PassengerEnterprise < Formula
   # to build nginx module
   depends_on "nginx" => :recommended
   depends_on "openssl@3"
-  depends_on "pcre"
   depends_on "pcre2"
 
   uses_from_macos "xz" => :build
@@ -113,9 +112,6 @@ class PassengerEnterprise < Formula
 
     man1.install Dir["man/*.1"]
     man8.install Dir["man/*.8"]
-
-    # See https://github.com/Homebrew/homebrew-core/pull/84379#issuecomment-910179525
-    deuniversalize_machos
   end
 
   def caveats
