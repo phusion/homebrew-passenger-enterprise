@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.1.1"
-  sha256 "e076aa9a73e64b141ddfdeb15826aafa76209189c6c686031def4426e282a971"
+  version "6.1.2"
+  sha256 "78d7a5dbc306611d1091d76dab92f67551cc98f26ebfdd94c2fad595754cc147"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -41,7 +41,7 @@ class PassengerEnterprise < Formula
     :because => "passenger and passenger-enterprise install the same binaries"
 
   def install
-    if OS.mac? && MacOS.version >= :mojave && MacOS::CLT.installed?
+    if OS.mac? && MacOS::CLT.installed?
       ENV["SDKROOT"] = MacOS::CLT.sdk_path(MacOS.version)
     else
       ENV.delete("SDKROOT")
