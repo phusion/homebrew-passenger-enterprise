@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.1.2"
-  sha256 "78d7a5dbc306611d1091d76dab92f67551cc98f26ebfdd94c2fad595754cc147"
+  version "6.1.3"
+  sha256 "2f254a74d7c34d4306f048a4ef53b665a8c033ecd2d107ab4369f51cf35573cd"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -35,7 +35,10 @@ class PassengerEnterprise < Formula
   uses_from_macos "curl"
   uses_from_macos "libxcrypt"
   uses_from_macos "ruby"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries"

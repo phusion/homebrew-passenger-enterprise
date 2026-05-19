@@ -7,6 +7,7 @@ class NginxPassengerEnterprise < Formula
   sha256 Formula["nginx"].stable.checksum.hexdigest
   license "BSD-2-Clause"
   revision Formula["nginx"].revision
+  compatibility_version Formula["nginx"].compatibility_version
   head "https://github.com/nginx/nginx.git", branch: "master"
 
   livecheck do
@@ -20,7 +21,10 @@ class NginxPassengerEnterprise < Formula
 
   uses_from_macos "xz" => :build
   uses_from_macos "libxcrypt"
-  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "zlib-ng-compat"
+  end
 
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
