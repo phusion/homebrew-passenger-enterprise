@@ -1,6 +1,6 @@
 class PassengerEnterprise < Formula
-  version "6.1.5"
-  sha256 "14fc96855abea19f9ba6dbaa2043be183eb0bd6eba8da75e51055b10b803a01c"
+  version "6.1.6"
+  sha256 "368c91df2e0394b45cd116ba510d9e4fe4473a19b9975383cb29ec2784db0143"
 
   def self.token
     filepath = File.expand_path("~/.passenger-enterprise-download-token")
@@ -148,7 +148,7 @@ class PassengerEnterprise < Formula
     ruby_libdir = `#{HOMEBREW_PREFIX}/bin/passenger-config --ruby-libdir`.strip
     assert_equal "#{libexec}/src/ruby_supportlib", ruby_libdir
 
-    (testpath/"nginx.conf").write <<~EOS
+    (testpath/"nginx.conf").write <<~CONF
       load_module #{opt_libexec}/modules/ngx_http_passenger_module.so;
       worker_processes 4;
       error_log #{testpath}/error.log;
@@ -176,7 +176,7 @@ class PassengerEnterprise < Formula
           error_log #{testpath}/error.log;
         }
       }
-    EOS
+    CONF
     system "#{Formula["nginx"].opt_bin}/nginx", "-t", "-c", testpath/"nginx.conf"
   end
 end
