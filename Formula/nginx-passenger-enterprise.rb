@@ -29,6 +29,9 @@ class NginxPassengerEnterprise < Formula
   conflicts_with "nginx",
     because: "nginx and nginx-passenger-enterprise install the same binaries"
 
+  # Allow broken symlink to be created by post install
+  skip_clean "html"
+
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger
     (pkgshare/"src").mkpath
@@ -40,11 +43,8 @@ class NginxPassengerEnterprise < Formula
       s.gsub! "    #}\n\n}", "    #}\n    include servers/*;\n}"
     end
 
-    openssl = Formula["openssl@3"]
-    pcre = Formula["pcre2"]
-
-    cc_opt = "-I#{pcre.opt_include} -I#{openssl.opt_include}"
-    ld_opt = "-L#{pcre.opt_lib} -L#{openssl.opt_lib}"
+    cc_opt = "-I#{formula_opt_include("pcre2")} -I#{formula_opt_include("openssl@3")}"
+    ld_opt = "-L#{formula_opt_lib("pcre2")} -L#{formula_opt_lib("openssl@3")}"
 
     args = %W[
       --prefix=#{prefix}
@@ -107,33 +107,21 @@ class NginxPassengerEnterprise < Formula
     else
       man8.install "man/nginx.8"
     end
-  end
 
-  def post_install
-    (etc/"nginx/servers").mkpath
+    touch (etc/"nginx/servers").mkpath/".keepme"
     (var/"run/nginx").mkpath
 
     # nginx's docroot is #{prefix}/html, this isn't useful, so we symlink it
     # to #{HOMEBREW_PREFIX}/var/www. The reason we symlink instead of patching
     # is so the user can redirect it easily to something else if they choose.
-    html = prefix/"html"
-    dst = var/"www"
+    libexec.install prefix/"html"
+    prefix.install_symlink var/"www" => "html"
+  end
 
-    if dst.exist?
-      rm_r(html)
-      dst.mkpath
-    else
-      dst.dirname.mkpath
-      mv(html, dst)
+  post_install_steps do
+    unless_path_exists "{{var}}/www" do
+      move "{{libexec}}/html", "{{var}}/www"
     end
-
-    prefix.install_symlink dst => "html"
-
-    # for most of this formula's life the binary has been placed in sbin
-    # and Homebrew used to suggest the user copy the plist for nginx to their
-    # ~/Library/LaunchAgents directory. So we need to have a symlink there
-    # for such cases
-    sbin.install_symlink bin/"nginx" if rack.subdirs.any? { |d| d.join("sbin").directory? }
   end
 
   def passenger_caveats
