@@ -28,7 +28,7 @@ class PassengerEnterprise < Formula
 
   # to build nginx module
   depends_on "nginx" => :recommended
-  depends_on "openssl@3"
+  depends_on "openssl@4"
   depends_on "pcre2"
 
   uses_from_macos "xz" => :build
