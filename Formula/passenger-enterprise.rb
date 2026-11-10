@@ -42,6 +42,9 @@ class PassengerEnterprise < Formula
 
   conflicts_with "passenger",
     :because => "passenger and passenger-enterprise install the same binaries"
+  allow_network_access! :test
+
+  def openssl = deps.map(&:name).find { |d| d.match?(/^openssl(@\d+(\.\d+)*)?$/) }
 
   def install
     if OS.mac? && MacOS::CLT.installed?
@@ -51,18 +54,19 @@ class PassengerEnterprise < Formula
     end
 
     inreplace "src/ruby_supportlib/phusion_passenger/platform_info/openssl.rb" do |s|
-      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{formula_opt_include("openssl@3")}"
-      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{formula_opt_lib("openssl@3")}"
+      s.gsub! "-I/usr/local/opt/openssl/include", "-I#{formula_opt_include(openssl)}"
+      s.gsub! "-L/usr/local/opt/openssl/lib", "-L#{formula_opt_lib(openssl)}"
     end
 
     system "rake", "apache2" if build.with? "apache2-module"
     if build.with?("nginx")
     system "rake", "nginx"
     nginx_addon_dir = `./bin/passenger-config about nginx-addon-dir`.strip
+    nginx = Formula["nginx"]
 
     mkdir "nginx" do
-      system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
-      args = (Formula["nginx"].opt_pkgshare/"src/configure_args.txt").read.split("\n")
+      system "tar", "-xf", "#{nginx.opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
+      args = (nginx.opt_pkgshare/"src/configure_args.txt").read.split("\n")
       args << "--add-dynamic-module=#{nginx_addon_dir}"
 
       system "./configure", *args
@@ -101,8 +105,8 @@ class PassengerEnterprise < Formula
       "--ruby", ruby_libdir, *Dir[libexec/"bin/*"]
 
     # Recreate the tarball with a top-level directory, and use Gzip compression.
-    mkdir "nginx-#{Formula["nginx"].version}" do
-      system "tar", "-xf", "#{Formula["nginx"].opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
+    mkdir "nginx-#{nginx.version}" do
+      system "tar", "-xf", "#{nginx.opt_pkgshare}/src/src.tar.xz", "--strip-components", "1"
     end
     system "tar", "-czf", buildpath/"nginx.tar.gz", "nginx-#{Formula["nginx"].version}"
 
