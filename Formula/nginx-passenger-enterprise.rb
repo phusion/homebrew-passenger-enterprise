@@ -15,7 +15,7 @@ class NginxPassengerEnterprise < Formula
     regex(%r{nginx[._-]v?(\d+(?:\.\d+)+)</a>\nmainline version}i)
   end
 
-  depends_on "openssl@3"
+  depends_on "openssl@4"
   depends_on "passenger-enterprise"
   depends_on "pcre2"
 
@@ -32,6 +32,9 @@ class NginxPassengerEnterprise < Formula
   # Allow broken symlink to be created by post install
   skip_clean "html"
 
+  # Test starts a local nginx server
+  allow_network_access! :test
+
   def install
     # keep clean copy of source for compiling dynamic modules e.g. passenger
     (pkgshare/"src").mkpath
@@ -43,8 +46,8 @@ class NginxPassengerEnterprise < Formula
       s.gsub! "    #}\n\n}", "    #}\n    include servers/*;\n}"
     end
 
-    cc_opt = "-I#{formula_opt_include("pcre2")} -I#{formula_opt_include("openssl@3")}"
-    ld_opt = "-L#{formula_opt_lib("pcre2")} -L#{formula_opt_lib("openssl@3")}"
+    cc_opt = "-I#{formula_opt_include("pcre2")} -I#{formula_opt_include("openssl@4")}"
+    ld_opt = "-L#{formula_opt_lib("pcre2")} -L#{formula_opt_lib("openssl@4")}"
 
     args = %W[
       --prefix=#{prefix}
@@ -183,3 +186,4 @@ class NginxPassengerEnterprise < Formula
     system bin/"nginx", "-t", "-c", testpath/"nginx.conf"
   end
 end
+
