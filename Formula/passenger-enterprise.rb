@@ -42,7 +42,7 @@ class PassengerEnterprise < Formula
 
   conflicts_with "passenger",
     because: "passenger and passenger-enterprise install the same binaries"
-  allow_network_access! :test
+  allow_network_access! [ :build, :test ]
 
   def openssl = deps.map(&:name).find { |d| d.match?(/^openssl(@\d+(\.\d+)*)?$/) }
 
