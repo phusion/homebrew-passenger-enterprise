@@ -20,7 +20,7 @@ class PassengerEnterprise < Formula
 
   desc "Server for Ruby, Python, and Node.js apps via Apache/NGINX"
   homepage "https://www.phusionpassenger.com/"
-  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", :user => "download:#{PassengerEnterprise.token}"
+  url "https://www.phusionpassenger.com/orders/download?dir=#{version}&file=passenger-enterprise-server-#{version}.tar.gz", user: "download:#{PassengerEnterprise.token}"
   license "https://www.phusionpassenger.com/customers/account/read_latest_eula"
 
   revision Formula["passenger"].revision if Formula["passenger"].version >= version
@@ -41,7 +41,7 @@ class PassengerEnterprise < Formula
   end
 
   conflicts_with "passenger",
-    :because => "passenger and passenger-enterprise install the same binaries"
+    because: "passenger and passenger-enterprise install the same binaries"
   allow_network_access! :test
 
   def openssl = deps.map(&:name).find { |d| d.match?(/^openssl(@\d+(\.\d+)*)?$/) }
@@ -184,4 +184,3 @@ class PassengerEnterprise < Formula
     system "#{formula_opt_bin("nginx")}/nginx", "-t", "-c", testpath/"nginx.conf"
   end
 end
-
